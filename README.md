@@ -48,5 +48,3 @@ IMPORTANT NOTES:
 - we prefer code quality over performance !
 - we prefer code quality over awesome features ! 
 
-Source: https://github.com/smartholiday/anki
-
