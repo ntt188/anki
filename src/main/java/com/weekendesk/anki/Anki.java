@@ -1,44 +1,35 @@
 package com.weekendesk.anki;
 
-import java.util.List;
-
 public class Anki {
-    private final String cardFileName;
+    private final CardFile cardFile;
 
-    public Anki(final String cardFileName) {
-        this.cardFileName = cardFileName;
+    public Anki(final CardFile cardFile) {
+        this.cardFile = cardFile;
     }
 
     public void start() {
-        List<Card> unstudiedCards = readCardsFromFile();
-        startNewCardSession(unstudiedCards);
-        if (Box.isAllCardsInGreenBox()) {
+        final Session session = this.cardFile.read();
+        session.start();
+        if (session.isAllCardsInGreenBox()) {
             printCongratulationMessage();
+            deleteSaveSessionFile();
         } else {
-            Box.moveCardsForNextSession();
-            saveState();
+            session.moveCardsForNextSession();
+            save(session);
             printGoodbyMessage();
         }
     }
 
-    private List<Card> readCardsFromFile() {
-        CardFileReader reader = new CardFileReader(cardFileName);
-        reader.read();
-        return reader.getUnstudiedCards();
-    }
-
-    private void startNewCardSession(final List<Card> unstudiedCards) {
-        CardSession cardSession = new CardSession(unstudiedCards);
-        cardSession.start();
-    }
-
     private void printCongratulationMessage() {
         System.out.println("All cards are in green box. Congratulation!");
-        new StateWriter().deleteSaveFile();
     }
 
-    private void saveState() {
-        new StateWriter().write();
+    private void deleteSaveSessionFile() {
+        this.cardFile.deleteSaveFile();
+    }
+
+    private void save(final Session session) {
+        this.cardFile.save(session);
     }
 
     private void printGoodbyMessage() {

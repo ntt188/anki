@@ -1,43 +1,16 @@
 package com.weekendesk.anki;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-public enum Box {
-    RED("1"),
-    ORANGE("2"),
-    GREEN("3");
+public class Box {
 
-    private final String input;
+    private final Color color;
     private final List<Card> cards;
 
-    Box(final String input) {
-        this.input = input;
+    Box(final Color color) {
+        this.color = color;
         this.cards = new ArrayList<>();
-    }
-
-    public static void clearAll() {
-        Arrays.stream(Box.values()).forEach(Box::clear);
-    }
-
-    public static Optional<Box> fromInput(final String input) {
-        return Arrays.stream(Box.values()).filter(box -> box.input.equals(input)).findFirst();
-    }
-
-    public static boolean isAllCardsInGreenBox() {
-        return Box.RED.isEmpty() && Box.ORANGE.isEmpty();
-    }
-
-    public static void moveCardsForNextSession() {
-        moveAll(Box.ORANGE, Box.RED);
-        moveAll(Box.GREEN, Box.ORANGE);
-    }
-
-    private static void moveAll(Box fromBox, Box targetBox) {
-        targetBox.addAll(fromBox.cards());
-        fromBox.clear();
     }
 
     public void put(final Card card) {
@@ -69,5 +42,9 @@ public enum Box {
 
     public Card cardAt(final int index) {
         return this.cards().get(index);
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

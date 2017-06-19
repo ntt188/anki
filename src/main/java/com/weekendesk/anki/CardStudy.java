@@ -6,13 +6,13 @@ import java.io.InputStreamReader;
 import java.util.Optional;
 
 public class CardStudy {
-    private final BufferedReader bufferedReader;
+    private BufferedReader bufferedReader;
 
-    public CardStudy() {
+    public void initialize() {
         bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public void study(final Card card) {
+    public Color study(final Card card) {
         System.out.println("Question: " + card.getQuestion());
         System.out.println("Press enter to show the answer.");
         readInput();
@@ -20,15 +20,27 @@ public class CardStudy {
         System.out.println("Please choose a box to put the card: (1) Red Box, (2) Orange Box, (3) Green Box");
 
         while (true) {
-            System.out.println("Your answer (1|2|3): ");
+            System.out.print("Your answer (1|2|3): ");
             String userInput = readInput();
-            Optional<Box> boxOptional = Box.fromInput(userInput);
-            if (boxOptional.isPresent()) {
-                boxOptional.get().put(card);
-                break;
-            } else {
-                System.out.println("\n Invalid answer. Please input 1 or 2 or 3!");
+            Optional<Color> colorOptional = getColor(userInput);
+            if (colorOptional.isPresent()) {
+                return colorOptional.get();
             }
+
+            System.out.println("\n Invalid answer. Please press 1 or 2 or 3!");
+        }
+    }
+
+    Optional<Color> getColor(final String userInput) {
+        switch (userInput) {
+            case "1":
+                return Optional.of(Color.RED);
+            case "2":
+                return Optional.of(Color.ORANGE);
+            case "3":
+                return Optional.of(Color.GREEN);
+            default:
+                return Optional.empty();
         }
     }
 
